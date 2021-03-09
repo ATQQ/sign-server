@@ -28,3 +28,6 @@ yarn lint
 ```
 yarn test
 ```
+
+## 文档
+* [数据库设计](./docs/db.md)
