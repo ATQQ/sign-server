@@ -1,8 +1,9 @@
 const mainRouter = require('express').Router()
 
-const weChat = require('./modules/wechat');
+// const weChat = require('./modules/wechat');
+const user = require('./modules/user');
 
-[weChat].forEach(({ prefix, router }) => {
+[user].forEach(({ prefix, router }) => {
   mainRouter.use(prefix, router)
 })
 
