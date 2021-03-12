@@ -5,6 +5,7 @@ const defaultOptions = {
   gender: Gender.MALE,
   lastLogin: new Date(),
   loginCount: 0,
+  avatar: '/static/logo.png',
 }
 class User {
   constructor(userId, options = {}) {
@@ -14,6 +15,7 @@ class User {
     this.gender = ops.gender
     this.lastLogin = ops.lastLogin
     this.loginCount = ops.loginCount
+    this.avatar = options.avatar
   }
 }
 

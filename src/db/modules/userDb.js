@@ -7,9 +7,9 @@ function findUser(user) {
   })
 }
 
-function insertUser(userId, gender = 1, nickname = '随机') {
+function insertUser(userId, options = {}) {
   return mongodbQuery((db, resolve) => {
-    db.collection('user').insert(new User(userId, { gender, nickname })).then(resolve)
+    db.collection('user').insert(new User(userId, options)).then(resolve)
   })
 }
 module.exports = {

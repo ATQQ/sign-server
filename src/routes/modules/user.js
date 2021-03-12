@@ -1,11 +1,17 @@
 const router = require('express').Router()
+const localStorage = require('../../utils/storageUtil')
 
+const { updateCollection } = require('../../db/modules/public')
 const { findUser, insertUser } = require('../../db/modules/userDb')
 const Result = require('../../utils/result')
 const { code2session } = require('../../utils/wechatUtil')
+const { Time } = require('../../constants')
 
 router.post('/login', (req, res) => {
-  const { code, nickName, gender } = req.body
+  // TODO: 返回登录失败
+  const {
+    code, nickname, gender, avatar,
+  } = req.body
   code2session(code).then(async ({ data }) => {
     const { openid, session_key } = data
     let [user] = await findUser({
@@ -14,20 +20,29 @@ router.post('/login', (req, res) => {
     // 不存在插入数据
     if (!user) {
       // 插入数据库
-      const { ops, insertedCount } = await insertUser(openid, gender, nickName)
-      // TODO: 返回登录失败
-      if (insertedCount !== 1) {
-        // res.send(Result)
-        // return
-        console.log('登录失败')
-      }
+      const { ops } = await insertUser(openid, {
+        gender,
+        nickname,
+        avatar,
+      });
+
       ([user] = ops)
     } else {
-      // 更新最后登录时间
+      // 异步更新最后登录时间
       // 更新登录次数
+      updateCollection('user', user, {
+        $set: {
+          lastDate: new Date(),
+          loginCount: user.loginCount + 1,
+          gender,
+          nickname,
+          avatar,
+        },
+      })
     }
-    console.log(user)
     // 将key - user信息存入服务端的Storage中
+    // 2小时过期
+    localStorage.setItem(session_key, user, Time.HOUR * 2)
     // 将session_key作为token回传
     res.send(Result.success(session_key))
   })
