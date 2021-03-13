@@ -37,9 +37,16 @@ function updateActivityInfo(activityId, userId, info) {
 function findActivity(query) {
   return findCollection('activity', query)
 }
+
+function findActivityByIds(ids) {
+  return findCollection('activity', {
+    $or: ids.map((activityId) => ({ activityId })),
+  })
+}
 module.exports = {
   insertActivity,
   findManageActivities,
   updateActivityInfo,
   findActivity,
+  findActivityByIds,
 }

@@ -16,8 +16,26 @@ const StatusCode = {
   },
   nowPower: 99999,
 }
+
+const SignStatus = {
+  ing: 1,
+  pause: 0,
+  over: -1,
+}
+
+/**
+ * 1:二维码,2:定位,3:拍照 4: 教师修改
+ */
+const signMethod = {
+  qrCode: 1,
+  gps: 2,
+  camera: 3,
+  teacher: 4,
+}
 module.exports = {
   Gender,
   Time,
   StatusCode,
+  SignStatus,
+  signMethod,
 }

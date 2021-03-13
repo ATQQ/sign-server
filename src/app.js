@@ -1,19 +1,19 @@
 const dotenv = require('dotenv')
 const express = require('express')
 
-console.log('引入自定义的环境变量')
-console.log(dotenv.config())
-
-const mainRouter = require('./routes')
-
 // 读取-打印环境变量
 // 读取.env环境变量配置文件
+console.log('引入自定义的环境变量')
+console.log(dotenv.config())
 
 const { serverConfig } = require('./config')
 const { testFn } = require('./utils/testUtil')
 const { getLoginUserInfo } = require('./utils/userUtil')
 const Result = require('./utils/result')
 const { StatusCode } = require('./constants')
+// 用户的所有路由
+const mainRouter = require('./routes')
+const { updateSignStatus } = require('./utils/signUtil')
 
 // 实例化express
 const app = express()
@@ -40,6 +40,8 @@ app.use(mainRouter)
 if (process.env.npm_lifecycle_event === 'dev') {
   testFn()
 }
+
 app.listen(serverConfig.port, serverConfig.hostname, () => {
+  updateSignStatus()
   console.log(`server start at ${serverConfig.hostname}:${serverConfig.port}`)
 })

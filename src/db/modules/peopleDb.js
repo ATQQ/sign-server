@@ -32,9 +32,15 @@ function updatePeopleName(peopleId, activityId, newName) {
     },
   })
 }
+function findPeopleByUserId(userId) {
+  return findCollection('people', {
+    userId,
+  })
+}
 module.exports = {
   insertPeople,
   findPeople,
   findActivityPeople,
   updatePeopleName,
+  findPeopleByUserId,
 }
