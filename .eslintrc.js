@@ -7,6 +7,9 @@ module.exports = {
   extends: [
     'airbnb-base',
   ],
+  plugins: [
+    'todo-ddl',
+  ],
   parserOptions: {
     ecmaVersion: 12,
   },
@@ -19,5 +22,6 @@ module.exports = {
     'no-console': 'off',
     camelcase: 'off',
     semi: ['error', 'never'],
+    'todo-ddl/diy': 'warn',
   },
 }

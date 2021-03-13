@@ -1731,6 +1731,11 @@ eslint-plugin-import@^2.22.1:
     resolve "^1.17.0"
     tsconfig-paths "^3.9.0"
 
+eslint-plugin-todo-ddl@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.npm.taobao.org/eslint-plugin-todo-ddl/download/eslint-plugin-todo-ddl-1.1.1.tgz#eabaa1c0eea9778f46f168f18d7f50fda0302e20"
+  integrity sha1-6rqhwO6pd49G8WjxjX9Q/aAwLiA=
+
 eslint-scope@^5.1.1:
   version "5.1.1"
   resolved "https://registry.npm.taobao.org/eslint-scope/download/eslint-scope-5.1.1.tgz#e786e59a66cb92b3f6c1fb0d508aab174848f48c"

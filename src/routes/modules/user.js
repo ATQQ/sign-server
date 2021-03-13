@@ -9,6 +9,10 @@ const { Time } = require('../../constants')
 
 router.post('/login', (req, res) => {
   // TODO: 返回登录失败
+  // 如果携带有旧的那么过期旧的
+  if (req.headers.token) {
+    localStorage.expireItem(req.headers.token)
+  }
   const {
     code, nickname, gender, avatar,
   } = req.body
