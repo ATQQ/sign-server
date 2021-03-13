@@ -15,6 +15,17 @@ function testFn() {
     lastDate: new Date('2021-03-12T03:07:38.739Z'),
   },
   Time.HOUR)
+  LocalStorage.setItem('testtoken2', {
+    _id: ObjectId('604ad9e031658e2cae7adace'),
+    userId: 'o4g1P5Favk2RG7-MRT8zuR5HLLtY',
+    nickname: 'forever',
+    gender: 1,
+    lastLogin: new Date('2021-03-12T03:01:20.132Z'),
+    loginCount: 21,
+    avatar: 'https://thirdwx.qlogo.cn/mmopen/vi_32/vL2hU0AibKEfanH3xu0XbO7nf843JOhica8iaN91Qf1s6mswBeSg686uGa1bautWiaGCic1shX8gAxXJscs2tdPbaOw/132',
+    lastDate: new Date('2021-03-12T08:12:09.645Z'),
+  },
+  Time.HOUR)
 }
 
 module.exports = {

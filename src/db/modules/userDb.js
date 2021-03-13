@@ -1,16 +1,12 @@
-const { query: mongodbQuery } = require('../mongodb')
 const User = require('../obj/user')
+const { findCollection, insertCollection } = require('./public')
 
 function findUser(user) {
-  return mongodbQuery((db, resolve) => {
-    db.collection('user').find(user).toArray().then(resolve)
-  })
+  return findCollection('user', user)
 }
 
 function insertUser(userId, options = {}) {
-  return mongodbQuery((db, resolve) => {
-    db.collection('user').insert(new User(userId, options)).then(resolve)
-  })
+  return insertCollection('user', new User(userId, options))
 }
 module.exports = {
   findUser,

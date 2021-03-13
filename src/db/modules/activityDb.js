@@ -1,5 +1,5 @@
 const { getUniqueId } = require('../../utils/stringUtil')
-const { findCollection, insertCollection } = require('./public')
+const { findCollection, insertCollection, updateCollection } = require('./public')
 
 function insertActivity(options) {
   const activityId = getUniqueId()
@@ -19,6 +19,27 @@ function insertActivity(options) {
   })
 }
 
+function findManageActivities(userId) {
+  return findCollection('activity', {
+    userId,
+  })
+}
+
+function updateActivityInfo(activityId, userId, info) {
+  return updateCollection('activity', {
+    activityId,
+    userId,
+  }, {
+    $set: info,
+  })
+}
+
+function findActivity(query) {
+  return findCollection('activity', query)
+}
 module.exports = {
   insertActivity,
+  findManageActivities,
+  updateActivityInfo,
+  findActivity,
 }

@@ -21,6 +21,7 @@ module.exports = {
     // 'error' or 2 将规则视为一个错误(退出码为1)
     'no-console': 'off',
     camelcase: 'off',
+    'no-param-reassign': 'off',
     semi: ['error', 'never'],
     'todo-ddl/diy': 'warn',
   },

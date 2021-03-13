@@ -1,7 +1,7 @@
 const dotenv = require('dotenv')
 const express = require('express')
 
-console.log('环境变量')
+console.log('引入自定义的环境变量')
 console.log(dotenv.config())
 
 const mainRouter = require('./routes')
