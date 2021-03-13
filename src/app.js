@@ -11,6 +11,9 @@ const mainRouter = require('./routes')
 
 const { serverConfig } = require('./config')
 const { testFn } = require('./utils/testUtil')
+const { getLoginUserInfo } = require('./utils/userUtil')
+const Result = require('./utils/result')
+const { StatusCode } = require('./constants')
 
 // 实例化express
 const app = express()
@@ -19,9 +22,15 @@ const app = express()
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json({ strict: true }))
 
-// 首先进入的路由
+// 首先进入的路由(全局的拦截器)
 app.route('*').all((req, res, next) => {
   console.log(`${req.method}--${req.url}`)
+  const { userId } = getLoginUserInfo(req)
+  // 登录校验
+  if (req.url !== '/user/login' && !userId) {
+    res.send(Result.fail(StatusCode.nowPower, 'no power'))
+    return
+  }
   next()
 })
 // 注册所有路由
