@@ -1,4 +1,5 @@
 const crypto = require('crypto')
+const { ObjectId } = require('mongodb')
 
 /**
  * 加密字符串(md5+base64)
@@ -17,7 +18,12 @@ function lowCamel2Underscore(word) {
   return letters.reduce((pre, letter) => pre + (/[A-Z]/.test(letter) ? `_${letter.toLowerCase()}` : letter), '')
 }
 
+function getUniqueId() {
+  return ObjectId().toString()
+}
+
 module.exports = {
   encryption,
   lowCamel2Underscore,
+  getUniqueId,
 }
