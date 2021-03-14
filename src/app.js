@@ -13,7 +13,7 @@ const Result = require('./utils/result')
 const { StatusCode } = require('./constants')
 // 用户的所有路由
 const mainRouter = require('./routes')
-const { updateSignStatus } = require('./utils/signUtil')
+const { updateSignStatus, updateSignQrCode } = require('./utils/signUtil')
 
 // 实例化express
 const app = express()
@@ -43,5 +43,6 @@ if (process.env.npm_lifecycle_event === 'dev') {
 
 app.listen(serverConfig.port, serverConfig.hostname, () => {
   updateSignStatus()
+  updateSignQrCode(10)
   console.log(`server start at ${serverConfig.hostname}:${serverConfig.port}`)
 })

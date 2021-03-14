@@ -9,8 +9,8 @@ class Result {
     return new Result(data)
   }
 
-  static fail(code = 500, msg = 'fail') {
-    return new Result(undefined, code, msg)
+  static fail(code = 500, msg = 'fail', data = undefined) {
+    return new Result(data, code, msg)
   }
 }
 

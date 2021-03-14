@@ -42,10 +42,24 @@ function updateSign(query, data) {
     $set: data,
   })
 }
+
+function findSignByQcCode(qrcode) {
+  return findCollection('sign', {
+    qrcode,
+  })
+}
+
+function findSignByPwd(pwd) {
+  return findCollection('sign', {
+    pwd,
+  })
+}
 module.exports = {
   insertSign,
   findSignByStatus,
   findSignById,
   updateSign,
   findSignByActivityId,
+  findSignByQcCode,
+  findSignByPwd,
 }
