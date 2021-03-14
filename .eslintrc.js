@@ -22,6 +22,7 @@ module.exports = {
     'no-console': 'off',
     camelcase: 'off',
     'no-param-reassign': 'off',
+    'no-bitwise': 'off',
     semi: ['error', 'never'],
     'todo-ddl/diy': 'warn',
   },

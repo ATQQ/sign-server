@@ -24,7 +24,28 @@ function findSignByStatus(status) {
     status,
   })
 }
+
+function findSignById(signId) {
+  return findCollection('sign', {
+    signId,
+  })
+}
+
+function findSignByActivityId(activityId) {
+  return findCollection('sign', {
+    activityId,
+  })
+}
+
+function updateSign(query, data) {
+  return updateCollection('sign', query, {
+    $set: data,
+  })
+}
 module.exports = {
   insertSign,
   findSignByStatus,
+  findSignById,
+  updateSign,
+  findSignByActivityId,
 }
