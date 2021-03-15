@@ -1,9 +1,12 @@
 const router = require('express').Router()
 
+const { StatusCode } = require('../../constants')
 const {
-  insertActivity, findManageActivities, updateActivityInfo, findActivityByIds,
+  insertActivity, findManageActivities, updateActivityInfo, findActivityByIds, findActivity,
 } = require('../../db/modules/activityDb')
-const { findPeopleByUserId } = require('../../db/modules/peopleDb')
+const { findPeopleByUserId, findActivityPeople } = require('../../db/modules/peopleDb')
+const { findRecordBySignId, findRecordByActivityIdAndUserId } = require('../../db/modules/recordDb')
+const { findSignByActivityId } = require('../../db/modules/signDb')
 const Result = require('../../utils/result')
 const { getLoginUserInfo } = require('../../utils/userUtil')
 
@@ -76,6 +79,45 @@ router.get('/list/join', (req, res) => {
           activities,
         }))
       })
+  })
+})
+
+/**
+ * 获取活动总体签到情况
+ */
+router.get('/analyze/:id', async (req, res) => {
+  const { id: activityId } = req.params
+  const { userId } = getLoginUserInfo(req)
+  const [activity] = await findActivity({ activityId, userId })
+  // 当前用户无此活动权限
+  if (!activity) {
+    res.send(Result.fail(StatusCode.nowPower))
+    return
+  }
+  const people = await findActivityPeople(activityId)
+  const sign = await findSignByActivityId(activityId)
+  // eslint-disable-next-line no-restricted-syntax
+  for (const s of sign) {
+    // eslint-disable-next-line no-await-in-loop
+    const records = await findRecordBySignId(s.signId)
+    s.records = records
+  }
+  res.send(Result.success({
+    people,
+    sign,
+  }))
+})
+
+/**
+ * 个人获取在活动中的签到记录
+ */
+router.get('/sign/:id', async (req, res) => {
+  const { userId } = getLoginUserInfo(req)
+  const { id: activityId } = req.params
+  findRecordByActivityIdAndUserId(activityId, userId).then((records) => {
+    res.send(Result.success({
+      records,
+    }))
   })
 })
 module.exports = {

@@ -32,6 +32,12 @@ function findRecordByPeopleIdAndSignId(peopleId, signId) {
   })
 }
 
+function findRecordByActivityIdAndUserId(activityId, userId) {
+  return findCollection('record', {
+    activityId,
+    userId,
+  })
+}
 function findRecordBySignId(signId) {
   return findCollection('record', {
     signId,
@@ -69,4 +75,5 @@ module.exports = {
   findRecordByPeopleIdAndSignId,
   updateRecordRank,
   findRecordBySignId,
+  findRecordByActivityIdAndUserId,
 }
