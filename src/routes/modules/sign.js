@@ -45,7 +45,7 @@ router.post('/:id', (req, res) => {
 })
 
 /**
- * 更改签到状态
+ * 更改签到表状态
  */
 router.put('/:id', async (req, res) => {
   const { id: signId } = req.params

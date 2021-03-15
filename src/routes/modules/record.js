@@ -3,9 +3,11 @@ const {
   SignMethod, StatusCode, SignStatus, RecordStatus,
 } = require('../../constants')
 const { findActivity } = require('../../db/modules/activityDb')
-const { findPeople } = require('../../db/modules/peopleDb')
-const { findRecordByUserIdAndSignId, updateRecord, insertRecord } = require('../../db/modules/recordDb')
-const { findSignByQcCode, findSignByPwd } = require('../../db/modules/signDb')
+const { findPeople, findPeopleById } = require('../../db/modules/peopleDb')
+const {
+  findRecordByUserIdAndSignId, updateRecord, insertRecord, findRecordByPeopleIdAndSignId, findRecordBySignId,
+} = require('../../db/modules/recordDb')
+const { findSignByQcCode, findSignByPwd, findSignById } = require('../../db/modules/signDb')
 const Result = require('../../utils/result')
 const { getLoginUserInfo } = require('../../utils/userUtil')
 
@@ -176,6 +178,130 @@ router.post('/sign', async (req, res) => {
       })
     }
   }
+})
+
+/**
+ * 教师更改学生签到状态
+ */
+router.put('/status/:id', async (req, res) => {
+  const { id: peopleId } = req.params
+  const { signId, status } = req.body
+  const { userId } = getLoginUserInfo(req)
+  const [people] = await findPeopleById(peopleId)
+  // 修改的用户不存在
+  if (!people) {
+    res.send(Result.fail(StatusCode.nowPower))
+    return
+  }
+  const [activity] = await findActivity({
+    activityId: people.activityId,
+    userId,
+  })
+  // 当前用户无此活动权限
+  if (!activity) {
+    res.send(Result.fail(StatusCode.nowPower))
+    return
+  }
+  const [recordData] = await findRecordByPeopleIdAndSignId(peopleId, signId)
+  // 系统没有记录
+  if (!recordData) {
+    insertRecord({
+      peopleId: people.peopleId,
+      userId: people.userId,
+      name: people.name,
+      signId,
+      activityId: people.activityId,
+      method: SignMethod.teacher,
+      status,
+    }).then(() => {
+      res.send(Result.success())
+    })
+    return
+  }
+  updateRecord({
+    recordId: recordData.recordId,
+  }, {
+    status,
+    method: SignMethod.teacher,
+    lastTime: new Date(),
+  }).then(() => {
+    res.send(Result.success())
+  })
+})
+
+/**
+ * 教师更新批注信息
+ */
+router.put('/tips/:id', async (req, res) => {
+  const { id: peopleId } = req.params
+  const { signId, tips } = req.body
+  const { userId } = getLoginUserInfo(req)
+  const [people] = await findPeopleById(peopleId)
+  // 修改的用户不存在
+  if (!people) {
+    res.send(Result.fail(StatusCode.nowPower))
+    return
+  }
+  const [activity] = await findActivity({
+    activityId: people.activityId,
+    userId,
+  })
+  // 当前用户无此活动权限
+  if (!activity) {
+    res.send(Result.fail(StatusCode.nowPower))
+    return
+  }
+  const [recordData] = await findRecordByPeopleIdAndSignId(peopleId, signId)
+  // 系统没有记录
+  if (!recordData) {
+    insertRecord({
+      peopleId: people.peopleId,
+      userId: people.userId,
+      name: people.name,
+      signId,
+      activityId: people.activityId,
+      method: SignMethod.teacher,
+      status: RecordStatus.fail,
+      tips,
+    }).then(() => {
+      res.send(Result.success())
+    })
+    return
+  }
+  updateRecord({
+    recordId: recordData.recordId,
+  }, {
+    method: SignMethod.teacher,
+    tips,
+    lastTime: new Date(),
+  }).then(() => {
+    res.send(Result.success())
+  })
+})
+
+router.get('/:id', async (req, res) => {
+  const { id: signId } = req.params
+  const { userId } = getLoginUserInfo(req)
+  const [signData] = await findSignById(signId)
+  // 此表不存在
+  if (!signData) {
+    res.send(Result.fail(StatusCode.nowPower))
+    return
+  }
+  const [activity] = await findActivity({
+    activityId: signData.activityId,
+    userId,
+  })
+  // 当前用户无此活动权限
+  if (!activity) {
+    res.send(Result.fail(StatusCode.nowPower))
+    return
+  }
+  findRecordBySignId(signId).then((records) => {
+    res.send(Result.success({
+      records,
+    }))
+  })
 })
 module.exports = {
   prefix: '/record',

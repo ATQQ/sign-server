@@ -23,6 +23,7 @@ module.exports = {
     camelcase: 'off',
     'no-param-reassign': 'off',
     'no-bitwise': 'off',
+    'no-use-before-define': 'off',
     semi: ['error', 'never'],
     'todo-ddl/diy': 'warn',
   },

@@ -37,10 +37,17 @@ function findPeopleByUserId(userId) {
     userId,
   })
 }
+function findPeopleById(peopleId) {
+  return findCollection('people', {
+    peopleId,
+  })
+}
+
 module.exports = {
   insertPeople,
   findPeople,
   findActivityPeople,
   updatePeopleName,
   findPeopleByUserId,
+  findPeopleById,
 }
