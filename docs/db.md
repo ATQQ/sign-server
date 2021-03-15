@@ -2,8 +2,9 @@
 | Name           | Type    | Comment      | description    | default        | example                  |
 | -------------- | ------- | ------------ | -------------- | -------------- | ------------------------ |
 | **userId**     | String  | 用户唯一标识 | -              | 微信获取openid | dsdsdsd                  |
-| **gender**     | Integer | 性别         | 1:男,0:女-默认 | 1              | 0                        |
+| **gender**     | Integer | 性别         | 1:男,2:女      | 1              | 2                        |
 | **nickname**   | String  | 昵称         | -              | 微信昵称>随机  | forever                  |
+| avatar         | String  | 头像         | 需要默认兜底图 | 微信获取       | /dsds/dsd                |
 | **lastLogin**  | Date    | 最后登录时间 | -              | new Date()     | 2021-03-08T07:46:52.126Z |
 | **loginCount** | Integer | 登录次数     | -              | 0              | 100                      |
 
@@ -28,8 +29,8 @@
 | **location**      | String    | 位置信息           | 一个json                           | 用户上传         | {}TODO     |
 | **pwd**           | String    | 口令               | 用于定位签到                       |                  |            |
 | **status**        | Integer   | 状态               | 1:进行中,0:暂停 -1 结束            | 0                | 0          |
-| **startTime    ** | Date      | 开始时间           | -                                  | new Date()       | -          |
-| **waitTime**      | Date      | 暂停时间           | -                                  | new Date()       | -          |
+| **startTime    ** | Date      | 开始时间           | -                                  | new Date()       | -          |
+| **pauseTime**     | Date      | 暂停时间           | -                                  | new Date()       | -          |
 | **endTime**       | Date      | 结束时间           | -                                  | new Date()+delay | -          |
 
 # 参加活动人员表-activity_people
