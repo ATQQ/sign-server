@@ -34,9 +34,11 @@ router.post('/login', (req, res) => {
     } else {
       // 异步更新最后登录时间
       // 更新登录次数
-      updateCollection('user', user, {
+      updateCollection('user', {
+        userId: user.userId,
+      }, {
         $set: {
-          lastDate: new Date(),
+          lastLogin: new Date(),
           loginCount: user.loginCount + 1,
           gender,
           nickname,

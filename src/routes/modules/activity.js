@@ -120,6 +120,20 @@ router.get('/sign/:id', async (req, res) => {
     }))
   })
 })
+
+router.get('/info/:pwd', (req, res) => {
+  const { pwd } = req.params
+  findActivity({
+    pwd,
+  }).then((data) => {
+    const [activity] = data
+    if (activity) {
+      res.send(Result.success(activity))
+      return
+    }
+    res.send(Result.fail(StatusCode.people.notExist, 'not exist'))
+  })
+})
 module.exports = {
   prefix: '/activity',
   router,
