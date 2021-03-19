@@ -123,9 +123,9 @@ router.get('/:id', async (req, res) => {
 router.get('/list/:id', async (req, res) => {
   const { id: activityId } = req.params
   findSignByActivityId(activityId).then((data) => {
-    res.send({
+    res.send(Result.success({
       sign_list: data,
-    })
+    }))
   })
 })
 module.exports = {
