@@ -46,3 +46,5 @@ app.listen(serverConfig.port, serverConfig.hostname, () => {
   updateSignQrCode(10)
   console.log(`server start at ${serverConfig.hostname}:${serverConfig.port}`)
 })
+
+module.exports = app
