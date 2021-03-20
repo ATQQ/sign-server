@@ -5,7 +5,8 @@ const {
 const { findActivity } = require('../../db/modules/activityDb')
 const { findPeople, findPeopleById } = require('../../db/modules/peopleDb')
 const {
-  findRecordByUserIdAndSignId, updateRecord, insertRecord, findRecordByPeopleIdAndSignId, findRecordBySignId,
+  findRecordByUserIdAndSignId,
+  updateRecord, insertRecord, findRecordByPeopleIdAndSignId, findRecordBySignId,
 } = require('../../db/modules/recordDb')
 const { findSignByQcCode, findSignByPwd, findSignById } = require('../../db/modules/signDb')
 const Result = require('../../utils/result')
@@ -60,7 +61,7 @@ router.post('/sign', async (req, res) => {
   // 已经参与过签到
   if (recordData) {
     // 状态不为失败  说明成功参与过了
-    if (recordData.status !== RecordStatus.fail) {
+    if (recordData.status !== RecordStatus.fail && recordData.status !== RecordStatus.not) {
       res.send(Result.fail(StatusCode.record.alreadySign, 'already sign'))
       return
     }
@@ -261,7 +262,7 @@ router.put('/tips/:id', async (req, res) => {
       signId,
       activityId: people.activityId,
       method: SignMethod.teacher,
-      status: RecordStatus.fail,
+      status: RecordStatus.not,
       tips,
     }).then(() => {
       res.send(Result.success())

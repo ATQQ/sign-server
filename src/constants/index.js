@@ -45,6 +45,7 @@ const SignMethod = {
  * 签到记录状态
  */
 const RecordStatus = {
+  not: -1,
   success: 0,
   fail: 1,
   late: 2,
