@@ -12,10 +12,10 @@ const { getLoginUserInfo } = require('../../utils/userUtil')
 /**
  * 创建签到
  */
-router.post('/:id', (req, res) => {
+router.post('/:id', async (req, res) => {
   const { id: activityId } = req.params
   const { method, location, time } = req.body
-  const { userId } = getLoginUserInfo(req)
+  const { userId } = await getLoginUserInfo(req)
   // 校验权限
   findActivity({
     activityId,

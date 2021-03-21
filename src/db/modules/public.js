@@ -31,6 +31,7 @@ function findCollection(collection, query) {
     })
   })
 }
+
 module.exports = {
   updateCollection,
   insertCollection,

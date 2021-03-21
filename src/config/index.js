@@ -6,6 +6,12 @@ const mongodbConfig = {
   password: process.env.MONGO_DB_PWD,
 }
 
+const redisConfig = {
+  host: process.env.REDIS_DB_HOST,
+  port: +process.env.REDIS_DB_PORT,
+  password: process.env.REDIS_DB_PWD,
+}
+
 const serverConfig = {
   port: +process.env.SERVER_PORT,
   hostname: 'localhost',
@@ -13,4 +19,5 @@ const serverConfig = {
 module.exports = {
   mongodbConfig,
   serverConfig,
+  redisConfig,
 }

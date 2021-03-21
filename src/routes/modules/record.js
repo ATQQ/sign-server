@@ -19,7 +19,7 @@ router.post('/sign', async (req, res) => {
   const {
     location = '', method, photo = '', qrcode, pwd,
   } = req.body
-  const { userId } = getLoginUserInfo(req)
+  const { userId } = await getLoginUserInfo(req)
   let signData = null
   // 查找到签到表的基本信息
   // 合法性校验
@@ -187,7 +187,7 @@ router.post('/sign', async (req, res) => {
 router.put('/status/:id', async (req, res) => {
   const { id: peopleId } = req.params
   const { signId, status } = req.body
-  const { userId } = getLoginUserInfo(req)
+  const { userId } = await getLoginUserInfo(req)
   const [people] = await findPeopleById(peopleId)
   // 修改的用户不存在
   if (!people) {
@@ -236,7 +236,7 @@ router.put('/status/:id', async (req, res) => {
 router.put('/tips/:id', async (req, res) => {
   const { id: peopleId } = req.params
   const { signId, tips } = req.body
-  const { userId } = getLoginUserInfo(req)
+  const { userId } = await getLoginUserInfo(req)
   const [people] = await findPeopleById(peopleId)
   // 修改的用户不存在
   if (!people) {
@@ -282,7 +282,7 @@ router.put('/tips/:id', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   const { id: signId } = req.params
-  const { userId } = getLoginUserInfo(req)
+  const { userId } = await getLoginUserInfo(req)
   const [signData] = await findSignById(signId)
   // 此表不存在
   if (!signData) {

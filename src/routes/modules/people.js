@@ -11,9 +11,9 @@ const { getLoginUserInfo } = require('../../utils/userUtil')
 /**
  * 成员加入活动
  */
-router.post('/join', (req, res) => {
+router.post('/join', async (req, res) => {
   const { name, pwd } = req.body
-  const { userId } = getLoginUserInfo(req)
+  const { userId } = await getLoginUserInfo(req)
   findActivity({
     pwd,
   }).then(async (data) => {
@@ -43,9 +43,9 @@ router.post('/join', (req, res) => {
 /**
  * 获取活动成员信息
  */
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   const { id } = req.params
-  const { userId } = getLoginUserInfo(req)
+  const { userId } = await getLoginUserInfo(req)
   findActivity({
     activityId: id,
     userId,
@@ -68,10 +68,10 @@ router.get('/:id', (req, res) => {
 /**
  * 修改活动成员的姓名
  */
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
   const { id } = req.params
   const { name, activityId } = req.body
-  const { userId } = getLoginUserInfo(req)
+  const { userId } = await getLoginUserInfo(req)
   findActivity({
     activityId,
     userId,

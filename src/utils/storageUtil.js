@@ -1,3 +1,5 @@
+const { setKV, getV } = require('../db/modules/redisDb')
+
 /**
  * 自行构建的本地存储对象
  */
@@ -25,6 +27,8 @@ class LocalStorage {
     if (this.map.size === 0) {
       this.loop()
     }
+    // redis
+    setKV(key, { value, duration }, duration)
     this.map.set(key, { value, duration })
   }
 
@@ -46,7 +50,18 @@ class LocalStorage {
    * 获取键值
    */
   getItem(key) {
-    return this.map.get(key)
+    return new Promise((res) => {
+      const v = this.map.get(key)
+      if (!v) {
+        // redis
+        getV(key).then((data) => {
+          this.map.set(key, data)
+          res(data)
+        })
+      } else {
+        res(v)
+      }
+    })
   }
 
   /**
@@ -59,18 +74,20 @@ class LocalStorage {
   /**
    * 过期检测
    */
-  expiredCheck() {
+  async expiredCheck() {
     const keys = this.map.keys()
     // eslint-disable-next-line no-restricted-syntax
     for (const key of keys) {
-      const value = this.getItem(key)
+      // eslint-disable-next-line no-await-in-loop
+      const value = await this.getItem(key)
       if (value.duration === 0) {
         // 处理过期
         console.log(`处理过期-------${key}`)
         this.removeItem(key)
       } else {
-        const { value: v, duration } = value
-        this.setItem(key, v, duration - 1)
+        value.duration -= 1
+        // const { value: v, duration } = value
+        // this.setItem(key, v, duration - 1)
       }
     }
   }

@@ -8,13 +8,25 @@ const url = `mongodb://${user}:${password}@${host}:${port}/${database}`
 
 function getDBConnection() {
   return new Promise((res, rej) => {
+    if (getDBConnection.instance) {
+      res(getDBConnection.instance)
+      return
+    }
     MongoClient.connect(url, {
       useUnifiedTopology: true,
       useNewUrlParser: true,
     }).then((db) => {
+      getDBConnection.instance = {
+        db,
+        Db: db.db(database),
+      }
       res({
         db,
         Db: db.db(database),
+      })
+      db.on('error', (error) => {
+        console.log(`MongoDB connecting failed: ${error}`)
+        getDBConnection.instance = null
       })
     }).catch((err) => {
       rej(err)
@@ -30,7 +42,7 @@ function query(callback) {
       // resolve后关闭
       p.catch((e) => rej(e))
         .finally(() => {
-          db.close()
+          // db.close()
         })
     })
   })

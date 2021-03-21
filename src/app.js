@@ -23,9 +23,9 @@ app.use(express.urlencoded({ extended: false }))
 app.use(express.json({ strict: true }))
 
 // 首先进入的路由(全局的拦截器)
-app.route('*').all((req, res, next) => {
+app.route('*').all(async (req, res, next) => {
   console.log(`${req.method}--${req.url}`)
-  const { userId } = getLoginUserInfo(req)
+  const { userId } = await getLoginUserInfo(req)
   // 登录校验
   if (req.url !== '/user/login' && !userId) {
     res.send(Result.fail(StatusCode.nowPower, 'no power'))
