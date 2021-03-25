@@ -9,6 +9,7 @@ const {
   updateRecord, insertRecord, findRecordByPeopleIdAndSignId, findRecordBySignId,
 } = require('../../db/modules/recordDb')
 const { findSignByQcCode, findSignByPwd, findSignById } = require('../../db/modules/signDb')
+const { isOkDistance } = require('../../utils/getDistance')
 const Result = require('../../utils/result')
 const { getLoginUserInfo } = require('../../utils/userUtil')
 
@@ -82,9 +83,8 @@ router.post('/sign', async (req, res) => {
 
     // 定位签到
     if (method === SignMethod.gps) {
-    // TODO: 判断地址是否欧克的逻辑
       // 成功
-      if (location === signData.location) {
+      if (isOkDistance(location,signData.location)) {
         updateRecord({
           recordId: recordData.recordId,
         }, {
@@ -148,9 +148,8 @@ router.post('/sign', async (req, res) => {
 
     // 定位签到
     if (method === SignMethod.gps) {
-      // TODO: 判断地址是否欧克的逻辑
       // 成功
-      if (location === signData.location) {
+      if (isOkDistance(location,signData.location)) {
         insertRecord({
           ...baseOptions,
           status: RecordStatus.success,
