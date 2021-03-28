@@ -1,6 +1,6 @@
 const router = require('express').Router()
 
-const { StatusCode } = require('../../constants')
+const { StatusCode, RecordStatus } = require('../../constants')
 const {
   insertActivity, findManageActivities, updateActivityInfo, findActivityByIds, findActivity,
 } = require('../../db/modules/activityDb')
@@ -114,11 +114,20 @@ router.get('/analyze/:id', async (req, res) => {
 router.get('/sign/:id', async (req, res) => {
   const { userId } = await getLoginUserInfo(req)
   const { id: activityId } = req.params
-  findRecordByActivityIdAndUserId(activityId, userId).then((records) => {
-    res.send(Result.success({
-      records,
-    }))
+  const records = await findRecordByActivityIdAndUserId(activityId, userId)
+  const signList = await findSignByActivityId(activityId)
+  const data = signList.map((sign) => {
+    const record = records.find((r) => r.signId === sign.signId)
+    const status = record ? record.status : RecordStatus.not
+    return {
+      status,
+      date: sign.startTime,
+      ...record,
+    }
   })
+  res.send(Result.success({
+    records: data,
+  }))
 })
 
 router.get('/info/:pwd', (req, res) => {
