@@ -32,8 +32,14 @@ function findCollection(collection, query) {
   })
 }
 
+function deleteCollection(collection,query){
+  return mongodbQuery((db, resolve) => {
+    db.collection(collection).deleteMany(query).then(resolve)
+  })
+}
 module.exports = {
   updateCollection,
   insertCollection,
   findCollection,
+  deleteCollection
 }

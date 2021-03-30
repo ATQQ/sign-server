@@ -4,6 +4,7 @@ const { StatusCode, RecordStatus } = require('../../constants')
 const {
   insertActivity, findManageActivities, updateActivityInfo, findActivityByIds, findActivity,
 } = require('../../db/modules/activityDb')
+const {deleteCollection} = require('../../db/modules/public')
 const { findPeopleByUserId, findActivityPeople } = require('../../db/modules/peopleDb')
 const { findRecordBySignId, findRecordByActivityIdAndUserId } = require('../../db/modules/recordDb')
 const { findSignByActivityId } = require('../../db/modules/signDb')
@@ -130,6 +131,9 @@ router.get('/sign/:id', async (req, res) => {
   }))
 })
 
+/**
+ * 通过口令查询活动信息
+ */
 router.get('/info/:pwd', (req, res) => {
   const { pwd } = req.params
   findActivity({
@@ -142,6 +146,29 @@ router.get('/info/:pwd', (req, res) => {
     }
     res.send(Result.fail(StatusCode.people.notExist, 'not exist'))
   })
+})
+
+/**
+ * 删除指定活动
+ */
+router.delete('/:id',async (req,res)=>{
+  const { userId } = await getLoginUserInfo(req)
+  const { id: activityId } = req.params
+  const [activity] = await findActivity({
+    activityId,
+    userId,
+  })
+  // 当前用户无此活动权限
+  if (!activity) {
+    res.send(Result.fail(StatusCode.nowPower))
+    return
+  }
+  // 删除相关的一切数据
+  await deleteCollection('activity',{activityId})
+  await deleteCollection('sign',{activityId})
+  await deleteCollection('people',{activityId})
+  await deleteCollection('record',{activityId})
+  res.send(Result.success())
 })
 module.exports = {
   prefix: '/activity',
