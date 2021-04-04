@@ -2,6 +2,7 @@ const router = require('express').Router()
 
 const { StatusCode } = require('../../constants')
 const { findActivity } = require('../../db/modules/activityDb')
+const { deleteCollection } = require('../../db/modules/public')
 const {
   insertPeople, findPeople, findActivityPeople, updatePeopleName,
 } = require('../../db/modules/peopleDb')
@@ -85,6 +86,24 @@ router.put('/:id', async (req, res) => {
       res.send(Result.success())
     })
   })
+})
+
+router.delete('/:id', async (req, res) => {
+  const { userId } = await getLoginUserInfo(req)
+  const { id: peopleId } = req.params
+  const { activityId } = req.query
+  const [activity] = await findActivity({
+    activityId,
+    userId,
+  })
+  // 当前用户无此活动权限
+  if (!activity) {
+    res.send(Result.fail(StatusCode.nowPower))
+    return
+  }
+  await deleteCollection('people', { peopleId })
+  await deleteCollection('record', { peopleId })
+  res.send(Result.success())
 })
 module.exports = {
   prefix: '/people',

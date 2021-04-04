@@ -4,7 +4,7 @@ const { StatusCode, RecordStatus } = require('../../constants')
 const {
   insertActivity, findManageActivities, updateActivityInfo, findActivityByIds, findActivity,
 } = require('../../db/modules/activityDb')
-const {deleteCollection} = require('../../db/modules/public')
+const { deleteCollection } = require('../../db/modules/public')
 const { findPeopleByUserId, findActivityPeople } = require('../../db/modules/peopleDb')
 const { findRecordBySignId, findRecordByActivityIdAndUserId } = require('../../db/modules/recordDb')
 const { findSignByActivityId } = require('../../db/modules/signDb')
@@ -151,7 +151,7 @@ router.get('/info/:pwd', (req, res) => {
 /**
  * 删除指定活动
  */
-router.delete('/:id',async (req,res)=>{
+router.delete('/:id', async (req, res) => {
   const { userId } = await getLoginUserInfo(req)
   const { id: activityId } = req.params
   const [activity] = await findActivity({
@@ -164,10 +164,10 @@ router.delete('/:id',async (req,res)=>{
     return
   }
   // 删除相关的一切数据
-  await deleteCollection('activity',{activityId})
-  await deleteCollection('sign',{activityId})
-  await deleteCollection('people',{activityId})
-  await deleteCollection('record',{activityId})
+  await deleteCollection('activity', { activityId })
+  await deleteCollection('sign', { activityId })
+  await deleteCollection('people', { activityId })
+  await deleteCollection('record', { activityId })
   res.send(Result.success())
 })
 module.exports = {
