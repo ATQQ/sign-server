@@ -2,7 +2,7 @@ const LocalStorage = require('./storageUtil')
 
 async function getLoginUserInfo(req) {
   const data = await LocalStorage.getItem(req.headers.token)
-  return (data && data.value) || {}
+  return data || {}
 }
 
 module.exports = {

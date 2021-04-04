@@ -24,12 +24,12 @@ class LocalStorage {
    * @param duration(s) 过期时间(默认-1不过期)
    */
   setItem(key, value, duration = -1) {
-    if (this.map.size === 0) {
-      this.loop()
-    }
+    // if (this.map.size === 0) {
+    //   this.loop()
+    // }
     // redis
-    setKV(key, { value, duration }, duration)
-    this.map.set(key, { value, duration })
+    setKV(key, value, duration)
+    this.map.set(key, value)
   }
 
   /**
