@@ -52,7 +52,7 @@ const RecordStatus = {
   notArrived: 3,
 }
 
-const WebHost = 'sign-web-9g25dl602379ebf0-1256505457.ap-shanghai.app.tcloudbase.com'
+const WebHost = 'sign-web-9g25dl602379ebf0-1256505457.tcloudbaseapp.com'
 module.exports = {
   Gender,
   Time,
