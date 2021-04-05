@@ -10,7 +10,7 @@ const { serverConfig } = require('./config')
 const { testFn } = require('./utils/testUtil')
 const { getLoginUserInfo } = require('./utils/userUtil')
 const Result = require('./utils/result')
-const { StatusCode } = require('./constants')
+const { StatusCode,WebHost } = require('./constants')
 // 用户的所有路由
 const mainRouter = require('./routes')
 const { updateSignStatus, updateSignQrCode } = require('./utils/signUtil')
@@ -24,10 +24,24 @@ app.use(express.json({ strict: true }))
 
 // 首先进入的路由(全局的拦截器)
 app.route('*').all(async (req, res, next) => {
+  //  -------跨域支持-----------
+  // 放行指定域名
+  res.setHeader('Access-Control-Allow-Origin', WebHost)
+  //跨域允许的header类型
+  res.setHeader("Access-Control-Allow-Headers", "*")
+  // 允许跨域携带cookie
+  res.setHeader("Access-Control-Allow-Credentials", "true")
+  // 允许的方法
+  res.setHeader('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS')
+
+  if (req.method === 'OPTIONS') {
+    return res.send()
+  }
   console.log(`${req.method}--${req.url}`)
   const { userId } = await getLoginUserInfo(req)
   // 登录校验
-  if (req.url !== '/user/login' && !userId) {
+  const notNeedAuth = ['/user/login','/user/login/code']
+  if (!notNeedAuth.includes(req.url) && !userId) {
     res.send(Result.fail(StatusCode.nowPower, 'no power'))
     return
   }

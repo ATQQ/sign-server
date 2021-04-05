@@ -51,6 +51,8 @@ const RecordStatus = {
   late: 2,
   notArrived: 3,
 }
+
+const WebHost = 'sign-web-9g25dl602379ebf0-1256505457.ap-shanghai.app.tcloudbase.com'
 module.exports = {
   Gender,
   Time,
@@ -58,4 +60,5 @@ module.exports = {
   SignStatus,
   SignMethod,
   RecordStatus,
+  WebHost
 }

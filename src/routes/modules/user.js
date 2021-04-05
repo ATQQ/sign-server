@@ -5,7 +5,9 @@ const { updateCollection } = require('../../db/modules/public')
 const { findUser, insertUser } = require('../../db/modules/userDb')
 const Result = require('../../utils/result')
 const { code2session } = require('../../utils/wechatUtil')
-const { Time } = require('../../constants')
+const { Time,WebHost } = require('../../constants')
+const { getV, setKV } = require('../../db/modules/redisDb')
+const { randomNumStr } = require('../../utils/randUtil')
 
 router.post('/login', (req, res) => {
   // TODO: 返回登录失败
@@ -53,6 +55,47 @@ router.post('/login', (req, res) => {
     // 将session_key作为token回传
     res.send(Result.success(session_key))
   })
+})
+
+/**
+ * 获取Web端链接
+ */
+router.get('/web', (req, res) => {
+  const token = req.headers.token
+  res.send(Result.success({
+    link: `${WebHost}?token=${token}`
+  }))
+})
+
+/**
+ * 获取用于登录的验证码
+ */
+router.get('/login/code', async (req, res) => {
+  const token = req.headers.token
+  let t = ''
+  let num = randomNumStr(4)
+  while (true) {
+    t = await getV(num)
+    if (!t) {
+      break
+    }
+    num = randomNumStr(4)
+  }
+  setKV(num, token)
+  res.send(Result.success({
+    num
+  }))
+})
+
+/**
+ * 换取登录token
+ */
+router.post('/login/code', async (req, res) => {
+  const { code } = req.body
+  const token = await getV(code)
+  // 过期
+  setKV(code,'',1)
+  res.send(Result.success(token))
 })
 
 module.exports = {
