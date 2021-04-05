@@ -63,7 +63,7 @@ router.post('/login', (req, res) => {
 router.get('/web', (req, res) => {
   const token = req.headers.token
   res.send(Result.success({
-    link: `${WebHost}?token=${token}`
+    link: `https://${WebHost}?token=${token}`
   }))
 })
 
