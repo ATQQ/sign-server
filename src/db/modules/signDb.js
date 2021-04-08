@@ -1,9 +1,10 @@
 const { getUniqueId } = require('../../utils/stringUtil')
+const { randomNumStr } = require('../../utils/randUtil')
 const { findCollection, insertCollection, updateCollection } = require('./public')
 
 function insertSign(options) {
   const signId = getUniqueId()
-  const pwd = signId.slice(-6)
+  const pwd = randomNumStr(6)
   const defaultOptions = {
     signId,
     qrcode: getUniqueId(),

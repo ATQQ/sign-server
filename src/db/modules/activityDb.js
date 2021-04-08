@@ -1,9 +1,10 @@
 const { getUniqueId } = require('../../utils/stringUtil')
+const { randomNumStr } = require('../../utils/randUtil')
 const { findCollection, insertCollection, updateCollection } = require('./public')
 
 function insertActivity(options) {
   const activityId = getUniqueId()
-  const pwd = activityId.slice(-6)
+  const pwd = randomNumStr(6)
   const defaultOptions = {
     activityId,
     nameFormat: '',
