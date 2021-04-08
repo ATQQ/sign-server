@@ -7,6 +7,9 @@ inputs:
   src:
     src: ./
     exclude:
+      - docs
+      - _tests_
+      - .github
       # - .env
       # - node_modules/**
   region: ap-chengdu
@@ -23,6 +26,10 @@ inputs:
     eip: false
     timeout: 3
     memorySize: 128
+    environment:
+      Variables:
+        ENV_FIRST: env1
+        ENV_SECOND: env2
   layers:
     - name: '${output:${stage}:${app}:sign-server-layer.name}'
       version: '${output:${stage}:${app}:sign-server-layer.version}'
