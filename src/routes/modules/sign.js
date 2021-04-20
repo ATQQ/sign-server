@@ -14,7 +14,9 @@ const { getLoginUserInfo } = require('../../utils/userUtil')
  */
 router.post('/:id', async (req, res) => {
   const { id: activityId } = req.params
-  const { method, location, time } = req.body
+  const {
+    method, location, time, qrTime, signDistance,
+  } = req.body
   const { userId } = await getLoginUserInfo(req)
   // 校验权限
   findActivity({
@@ -38,6 +40,10 @@ router.post('/:id', async (req, res) => {
       endTime,
       pauseTime,
       status: SignStatus.ing,
+      // 验证码刷新时间
+      qrTime,
+      // 有效签到距离
+      signDistance,
     }).then(() => {
       res.send(Result.success())
     })

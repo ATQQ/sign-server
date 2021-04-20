@@ -1,5 +1,5 @@
 const EARTH_RADIUS = 6378.137// 地球半径
-function rad (d) {
+function rad(d) {
   return d * Math.PI / 180.0
 }
 
@@ -7,7 +7,7 @@ function rad (d) {
  * 计算两个Gcj02坐标的距离
  * @returns (m)
  */
- function getDistance (o1, o2) {
+function getDistance(o1, o2) {
   const rad1 = rad(o1.latitude)
   const rad2 = rad(o2.latitude)
   const a = rad1 - rad2
@@ -17,16 +17,18 @@ function rad (d) {
 }
 const okDistance = 50
 
-function isOkDistance(o1,o2){
+function isOkDistance(o1, o2, okDis) {
+  if (typeof okDis !== 'number' || okDis <= 0) {
+    okDis = okDistance
+  }
   try {
-    return (~~getDistance(o1,o2))<=okDistance
+    return (~~getDistance(o1, o2)) <= okDis
   } catch (error) {
-    return false    
+    return false
   }
 }
 module.exports = {
   getDistance,
   okDistance,
-  isOkDistance
+  isOkDistance,
 }
-

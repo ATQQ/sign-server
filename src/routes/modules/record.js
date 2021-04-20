@@ -84,7 +84,7 @@ router.post('/sign', async (req, res) => {
     // 定位签到
     if (method === SignMethod.gps) {
       // 成功
-      if (isOkDistance(location,signData.location)) {
+      if (isOkDistance(location, signData.location, signData.signDistance)) {
         updateRecord({
           recordId: recordData.recordId,
         }, {
@@ -149,7 +149,7 @@ router.post('/sign', async (req, res) => {
     // 定位签到
     if (method === SignMethod.gps) {
       // 成功
-      if (isOkDistance(location,signData.location)) {
+      if (isOkDistance(location, signData.location, signData.signDistance)) {
         insertRecord({
           ...baseOptions,
           status: RecordStatus.success,

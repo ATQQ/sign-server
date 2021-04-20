@@ -51,7 +51,11 @@ async function updateSignQrCode(updateTime = 15) {
     }
     const shouldEnd = data.filter((sign) => {
       const { qrcode } = sign
-      return (ObjectId(qrcode).getTimestamp().getTime() + 1000 * updateTime) <= Date.now()
+      let { qrTime = updateTime } = sign
+      if (typeof qrTime !== 'number' || qrTime < 1) {
+        qrTime = updateTime
+      }
+      return (ObjectId(qrcode).getTimestamp().getTime() + 1000 * qrTime) <= Date.now()
     })
     if (!shouldEnd || shouldEnd.length === 0) {
       setTimeout(updateSignQrCode, 1000)
