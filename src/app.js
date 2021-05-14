@@ -22,18 +22,17 @@ const app = express()
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json({ strict: true }))
 
-const allowOrigins = [`http://${WebHost}`, `https://${WebHost}`]
-
+const allowOrigins = WebHost.reduce((pre, h) => pre.concat([`http://${h}`, `https://${h}`]), [])
 // 首先进入的路由(全局的拦截器)
 app.route('*').all(async (req, res, next) => {
   //  -------跨域支持-----------
   if (allowOrigins.includes(req.headers.origin)) {
     // 放行指定域名
     res.setHeader('Access-Control-Allow-Origin', req.headers.origin)
-    //跨域允许的header类型
-    res.setHeader("Access-Control-Allow-Headers", "*")
+    // 跨域允许的header类型
+    res.setHeader('Access-Control-Allow-Headers', '*')
     // 允许跨域携带cookie
-    res.setHeader("Access-Control-Allow-Credentials", "true")
+    res.setHeader('Access-Control-Allow-Credentials', 'true')
     // 允许的方法
     res.setHeader('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS')
   }

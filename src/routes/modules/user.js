@@ -5,17 +5,11 @@ const { updateCollection } = require('../../db/modules/public')
 const { findUser, insertUser } = require('../../db/modules/userDb')
 const Result = require('../../utils/result')
 const { code2session } = require('../../utils/wechatUtil')
-const { Time,WebHost } = require('../../constants')
+const { Time, WebHost } = require('../../constants')
 const { getV, setKV } = require('../../db/modules/redisDb')
 const { randomNumStr } = require('../../utils/randUtil')
 
 router.post('/login', (req, res) => {
-  // TODO: 返回登录失败
-  // 如果携带有旧的那么过期旧的
-  // 异步的,短时间的codeSession是一样的,会导致一直无权限
-  // if (req.headers.token) {
-  //   localStorage.expireItem(req.headers.token)
-  // }
   const {
     code, nickname, gender, avatar,
   } = req.body
@@ -61,9 +55,9 @@ router.post('/login', (req, res) => {
  * 获取Web端链接
  */
 router.get('/web', (req, res) => {
-  const token = req.headers.token
+  const { token } = req.headers
   res.send(Result.success({
-    link: `https://${WebHost}?token=${token}`
+    link: `https://${WebHost[1]}?token=${token}`,
   }))
 })
 
@@ -71,7 +65,7 @@ router.get('/web', (req, res) => {
  * 获取用于登录的验证码
  */
 router.get('/login/code', async (req, res) => {
-  const token = req.headers.token
+  const { token } = req.headers
   let t = ''
   let num = randomNumStr(4)
   while (true) {
@@ -83,7 +77,7 @@ router.get('/login/code', async (req, res) => {
   }
   setKV(num, token)
   res.send(Result.success({
-    num
+    num,
   }))
 })
 
@@ -94,7 +88,7 @@ router.post('/login/code', async (req, res) => {
   const { code } = req.body
   const token = await getV(code)
   // 过期
-  setKV(code,'',1)
+  setKV(code, '', 1)
   res.send(Result.success(token))
 })
 

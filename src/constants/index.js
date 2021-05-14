@@ -52,7 +52,7 @@ const RecordStatus = {
   notArrived: 3,
 }
 
-const WebHost = 'sign-web-9g25dl602379ebf0-1256505457.tcloudbaseapp.com'
+const WebHost = ['sign-web-9g25dl602379ebf0-1256505457.tcloudbaseapp.com', 'hdkq.top']
 module.exports = {
   Gender,
   Time,
@@ -60,5 +60,5 @@ module.exports = {
   SignStatus,
   SignMethod,
   RecordStatus,
-  WebHost
+  WebHost,
 }
